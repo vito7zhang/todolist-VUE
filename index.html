@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="./vue.js" charset="utf-8"></script>
+    <style media="screen">
+        .completed{
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-top">
+        <div class="page-content">
+            <h2>任务计划列表</h2>
+        </div>
+    </div>
+    <div class="main">
+        <h3 class="big-title">添加任务：</h3>
+        <!-- $event,事件对象 -->
+        <!-- v-model绑定Vue根实例的data内的todo -->
+        <input
+            type="text"
+            class="task-input"
+            placeholder="例如：吃饭睡觉打豆豆。（提示回车即可添加任务）"
+            v-model="todo"
+            v-on:keyup.enter="addTodo(123,$event)"
+        />
+        <ul class="task-count" v-show="list.length">
+            <li>
+                {{noCheckLength}}个任务未完成
+            </li>
+            <li class="action">
+                <a href="#all" class="active">所有任务</a>
+                <a href="#unfinished">未完成任务</a>
+                <a href="#finished">完成的任务</a>
+            </li>
+        </ul>
+        <h3 class="big-title">任务列表：</h3>
+        <div class="tasks">
+            <span class="no-task-tip" v-show="!list.length">还没有添加任何任务</span>
+            <ul class="todo-list">
+                <!-- 遍历Vue对象中的data属性中的list，item即list当中的对象。item名字自己取 -->
+                <li class="todo" :class="{completed:item.isChecked,editing:item===edtorTodos}" v-for="item in filteredList">
+                    <div class="view">
+                        <input type="checkbox" class="toggle" v-model="item.isChecked">
+                        <!-- 获得上面的item中的的title -->
+                        <label @dblclick="edtorTodo(item)">{{item.title}}</label>
+                        <button class="destory" @click="deleteTodo(item)">X</button>
+                    </div>
+                    <input
+                        v-focus="edtorTodos===item"
+                        type="text"
+                        class="edit"
+                        v-model="item.title"
+                        @blur="edtorTodoed(item)"
+                        @keyup.enter="edtorTodoed(item)"
+                        @keyup.esc="cancelTodo(item)"
+                    />
+                </li>
+
+            </ul>
+        </div>
+    </div>
+    <script src="./app.js" charset="utf-8"></script>
+</body>
+</html>
